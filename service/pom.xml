@@ -14,8 +14,28 @@
     <version>1.0</version>
     <modules>
         <module>service_user</module>
+        <module>service_hosp</module>
+        <module>service_cmn</module>
     </modules>
     <dependencies>
+        <dependency>
+            <groupId>com.eug</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.eug</groupId>
+            <artifactId>service-util</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.eug</groupId>
+            <artifactId>common-util</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
         <!--web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
