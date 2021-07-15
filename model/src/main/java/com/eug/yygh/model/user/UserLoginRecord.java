@@ -12,7 +12,6 @@ import lombok.Data;
  * UserLoginRecord
  * </p>
  *
- * @author qy
  */
 @Data
 @ApiModel(description = "用户登录日志")

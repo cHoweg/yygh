@@ -131,7 +131,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             }
         } else {
             Dict dict = dictMapper.selectOne(new QueryWrapper<Dict>().eq("dict_code", dictCode));
-            System.out.println(dict);
             if (null != dict) {
                 return dictMapper.selectOne(new QueryWrapper<Dict>()
                         .eq("parent_id", dict.getId())
@@ -140,6 +139,22 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             }
         }
         return "";
+    }
+
+    /**
+     * 根据code获取下级节点
+     *
+     * @param dictCode
+     * @return
+     */
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+
+        // 根据dictCode获得id
+        Dict dict = dictMapper.selectOne(new QueryWrapper<Dict>().eq("dict_code", dictCode));
+
+        // 根据id获得子节点
+        return this.findChildData(dict.getId());
     }
 
 }

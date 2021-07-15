@@ -2,7 +2,6 @@ package com.eug.yygh.hosp.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.eug.cmn.client.DictFeignClient;
-import com.eug.yygh.enums.DictEnum;
 import com.eug.yygh.hosp.repository.HospitalRepository;
 import com.eug.yygh.hosp.service.HospitalService;
 import com.eug.yygh.model.hosp.Hospital;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -117,4 +118,93 @@ public class HospitalServiceImpl implements HospitalService {
     }
 
 
+    /**
+     * 更新医院上线状态
+     *
+     * @param id
+     * @param status
+     */
+    @Override
+    public void updateHosStatus(String id, Integer status) {
+        Hospital hospital = hospitalRepository.findById(id).get();
+        hospital.setUpdateTime(new Date());
+        hospital.setStatus(status);
+        hospitalRepository.save(hospital);
+    }
+
+    /**
+     * 医院信息接口
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<String, Object> getHospById(String id) {
+
+        Hospital hos = hospitalRepository.findById(id).get();
+
+        String name = dictFeignClient.getName("Hostype", hos.getHostype());
+        hos.getParam().put("hostypeString", name);
+
+        hos.getParam().put("fullAddress",
+                dictFeignClient.getName(hos.getProvinceCode())
+                        + dictFeignClient.getName(hos.getCityCode())
+                        + dictFeignClient.getName(hos.getDistrictCode()));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("hospital", hos);
+        result.put("bookingRule", hos.getBookingRule());
+
+        return result;
+    }
+
+    /**
+     * 获取医院名称
+     *
+     * @param hoscode
+     */
+    @Override
+    public String getHospName(String hoscode) {
+        Hospital hospital = hospitalRepository.getHospitalByHoscode(hoscode);
+        if (hoscode != null) {
+            return hospital.getHosname();
+        }
+        return null;
+    }
+
+
+    /**
+     * 根据医院名称查询
+     *
+     * @param hosname
+     * @return
+     */
+    @Override
+    public List<Hospital> findByHosname(String hosname) {
+        return hospitalRepository.getHospitalByHosnameLike(hosname);
+    }
+
+
+    /**
+     * 根据医院编号获取医院预约挂号详细信息
+     *
+     * @param hoscode
+     * @return
+     */
+    @Override
+    public Map<String, Object> item(String hoscode) {
+
+        Hospital hos = hospitalRepository.getHospitalByHoscode(hoscode);
+        String name = dictFeignClient.getName("Hostype", hos.getHostype());
+        hos.getParam().put("hostypeString", name);
+        hos.getParam().put("fullAddress",
+                dictFeignClient.getName(hos.getProvinceCode())
+                        + dictFeignClient.getName(hos.getCityCode())
+                        + dictFeignClient.getName(hos.getDistrictCode()));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("hospital", hos);
+        result.put("bookingRule", hos.getBookingRule());
+        return result;
+    }
 }

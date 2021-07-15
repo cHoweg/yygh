@@ -1,9 +1,12 @@
-package com.eug.yygh.cmn.mapper;
+package com.eug.yygh.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.eug.yygh.model.cmn.Dict;
+import com.eug.yygh.model.user.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+
+@Mapper
 @Repository
-public interface DictMapper extends BaseMapper<Dict> {
+public interface UserInfoMapper extends BaseMapper<UserInfo> {
 }
